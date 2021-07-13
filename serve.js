@@ -25,16 +25,20 @@ var server = http.createServer(function(request, response){
 	let filePath = path === '/' ? '/index.html' : parsedUrl.pathname
 	let filetext 
 	const index = filePath.lastIndexOf('.')
-	console.log(index)
-	let b = filePath.substring(index + 1)
-	console.log(b)
+	// suffix 是后缀
+	const suffix = filePath.substring(index)
+	const filrTypes = {
+		'.html':'text/html',
+		'.css':'text/css',
+		'.js':'text/javascript'
+	}
+	response.setHeader('Content-Type', `${fileTypes[suffix] || 'text/html'};charset=utf-8`)	
 	try{
 		filetext = fs.readFileSync(`./public${filePath}`)
 	}catch(err){
 		response.statusCode = 404
 		filetext = '文件不存在'
 	}
-	response.setHeader('Content-Type', 'text/${};charset=utf-8')	
 	response.write(filetext)
 	response.end()
 	
