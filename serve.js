@@ -20,50 +20,91 @@ var server = http.createServer(function(request, response){
   /******** 从这里开始看，上面不要看 ************/
 
   console.log('有个傻子发请求过来啦！路径（带查询参数）为：' + pathWithQuery)
-	console.log(path)
-  if(path === '/html'){
-    response.statusCode = 200
-    response.setHeader('Content-Type', 'text/html;charset=utf-8')
-    response.write(`二哈`)
-    response.end()
-  } else if(path === '/css'){
-    response.statusCode = 200
-    response.setHeader('Content-Type', 'text/css;charset=utf-8')
-    response.write(`h1{color: red;}`)
-    response.end()
-  } else if(path === '/main'){
-    response.statusCode = 200
-    response.setHeader('Content-Type', 'text/html;charset=utf-8')
-    response.write(`
-		<!DOCTYPE html>
-		<html>
-			<head>
-				<meta charset="utf-8">
-				<title></title>
-					<link rel="stylesheet" href="/x">
-			</head>
-			<body>
-				<h1>
-					标题
-				</h1>
-				<script src="/y"></script>
-			</body>
-		</html>
-		`)
-    response.end()
-  }  else if(path === '/y'){
-    response.statusCode = 200
-    response.setHeader('Content-Type', 'text/javascript;charset=utf-8')
-    response.write(`
-		console.log('这是javascript')
-		`)
-    response.end()
-  } else {
-    response.statusCode = 404
-    response.setHeader('Content-Type', 'text/html;charset=utf-8')
-    response.write(`你输入的路径不存在对应的内容`)
-    response.end()
-  }
+	response.statusCode = 200
+	
+	let filePath = path === '/' ? '/index.html' : parsedUrl.pathname
+	let filetext 
+	const index = filePath.lastIndexOf('.')
+	console.log(index)
+	let b = filePath.substring(index + 1)
+	console.log(b)
+	try{
+		filetext = fs.readFileSync(`./public${filePath}`)
+	}catch(err){
+		response.statusCode = 404
+		filetext = '文件不存在'
+	}
+	response.setHeader('Content-Type', 'text/${};charset=utf-8')	
+	response.write(filetext)
+	response.end()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+  // if(path === '/html'){
+  //   response.statusCode = 200
+  //   response.setHeader('Content-Type', 'text/html;charset=utf-8')
+  //   response.write(`二哈`)
+  //   response.end()
+  // } else if(path === '/css'){
+  //   response.statusCode = 200
+  //   response.setHeader('Content-Type', 'text/css;charset=utf-8')
+  //   response.write(`h1{color: red;}`)
+  //   response.end()
+  // } else if(path === '/main'){
+  //   response.statusCode = 200
+  //   response.setHeader('Content-Type', 'text/html;charset=utf-8')
+  //   response.write(`
+		// <!DOCTYPE html>
+		// <html>
+		// 	<head>
+		// 		<meta charset="utf-8">
+		// 		<title></title>
+		// 			<link rel="stylesheet" href="/x">
+		// 	</head>
+		// 	<body>
+		// 		<h1>
+		// 			标题
+		// 		</h1>
+		// 		<script src="/y"></script>
+		// 	</body>
+		// </html>
+		// `)
+  //   response.end()
+  // }  else if(path === '/y'){
+  //   response.statusCode = 200
+  //   response.setHeader('Content-Type', 'text/javascript;charset=utf-8')
+  //   response.write(`
+		// console.log('这是javascript')
+		// `)
+  //   response.end()
+  // } else {
+  //   response.statusCode = 404
+  //   response.setHeader('Content-Type', 'text/html;charset=utf-8')
+  //   response.write(`你输入的路径不存在对应的内容`)
+  //   response.end()
+  // }
 
   /******** 代码结束，下面不要看 ************/
 })
